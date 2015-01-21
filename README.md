@@ -24,10 +24,11 @@ In the main file:
 ~~~ go
 package main
 
-import "github.com/joyt/totalconf"
-import "server"
-import "fmt"
-import "os"
+import (
+  "github.com/joyt/totalconf"
+  "server" // local package
+  "fmt"
+)
 
 var (
   port = totalconf.Int("port", 8080, "Server port")
@@ -50,11 +51,13 @@ In another package:
 ~~~ go
 package server
 
-import "log"
-import "http"
-import "fmt"
-import "time"
-import "github.com/joyt/totalconf"
+import (
+  "fmt"
+  "http"
+  "log"
+  
+  "github.com/joyt/totalconf"
+)
 
 var port = totalconf.String("port", "8000", "Server port")
 
