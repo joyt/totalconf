@@ -3,9 +3,9 @@ package totalconf
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"runtime"
+	"strings"
 	"sync"
 	"time"
 
@@ -40,7 +40,6 @@ func Parse(opts *Options) error {
 	conf.ParseAll()
 	set := map[string]bool{}
 	flag.Visit(func(f *flag.Flag) {
-		log.Println(f.Name, "is set")
 		set[f.Name] = true
 	})
 	for name, flagset := range flags {
@@ -62,6 +61,7 @@ func Parsed() bool {
 func String(name string, value string, usage string) *string {
 	mu.Lock()
 	defer mu.Unlock()
+	name = strings.ToLower(name)
 	var scope string
 	if _, file, line, ok := runtime.Caller(1); ok {
 		scope = fmt.Sprintf("%s:%d", file, line)
@@ -76,6 +76,7 @@ func String(name string, value string, usage string) *string {
 func Bool(name string, value bool, usage string) *bool {
 	mu.Lock()
 	defer mu.Unlock()
+	name = strings.ToLower(name)
 	var scope string
 	if _, file, line, ok := runtime.Caller(1); ok {
 		scope = fmt.Sprintf("%s:%d", file, line)
@@ -88,8 +89,10 @@ func Bool(name string, value bool, usage string) *bool {
 }
 
 func Duration(name string, value time.Duration, usage string) *time.Duration {
+	name = strings.ToLower(name)
 	mu.Lock()
 	defer mu.Unlock()
+	name = strings.ToLower(name)
 	var scope string
 	if _, file, line, ok := runtime.Caller(1); ok {
 		scope = fmt.Sprintf("%s:%d", file, line)
@@ -104,6 +107,7 @@ func Duration(name string, value time.Duration, usage string) *time.Duration {
 func Float64(name string, value float64, usage string) *float64 {
 	mu.Lock()
 	defer mu.Unlock()
+	name = strings.ToLower(name)
 	var scope string
 	if _, file, line, ok := runtime.Caller(1); ok {
 		scope = fmt.Sprintf("%s:%d", file, line)
@@ -118,6 +122,7 @@ func Float64(name string, value float64, usage string) *float64 {
 func Int(name string, value int, usage string) *int {
 	mu.Lock()
 	defer mu.Unlock()
+	name = strings.ToLower(name)
 	var scope string
 	if _, file, line, ok := runtime.Caller(1); ok {
 		scope = fmt.Sprintf("%s:%d", file, line)
@@ -132,6 +137,7 @@ func Int(name string, value int, usage string) *int {
 func Int64(name string, value int64, usage string) *int64 {
 	mu.Lock()
 	defer mu.Unlock()
+	name = strings.ToLower(name)
 	var scope string
 	if _, file, line, ok := runtime.Caller(1); ok {
 		scope = fmt.Sprintf("%s:%d", file, line)
