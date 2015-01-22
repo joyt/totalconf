@@ -3,6 +3,7 @@ package totalconf
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"runtime"
 	"sync"
@@ -39,6 +40,7 @@ func Parse(opts *Options) error {
 	conf.ParseAll()
 	set := map[string]bool{}
 	flag.Visit(func(f *flag.Flag) {
+		log.Println(f.Name, "is set")
 		set[f.Name] = true
 	})
 	for name, flagset := range flags {
