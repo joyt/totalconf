@@ -9,11 +9,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/coreos/go-etcd/etcd"
 	"github.com/rakyll/globalconf"
 )
 
 type Options struct {
 	globalconf.Options
+	EtcdClient *etcd.Client
 }
 
 var (
@@ -48,6 +50,12 @@ func Parse(opts *Options) error {
 			flagset.VisitAll(func(f *flag.Flag) {
 				f.Value.Set(val)
 			})
+		} else if opts.EtcdClient != nil {
+			if resp, err := opts.EtcdClient.Get(name, false, false); err == nil && resp.Node != nil {
+				flagset.VisitAll(func(f *flag.Flag) {
+					f.Value.Set(resp.Node.Value)
+				})
+			}
 		}
 	}
 	parsed = true
