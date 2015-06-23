@@ -28,7 +28,11 @@ var (
 func OnParsed(do func()) {
 	mu.Lock()
 	defer mu.Unlock()
-	onParseFuncs = append(onParseFuncs, do)
+	if parsed {
+		go do()
+	} else {
+		onParseFuncs = append(onParseFuncs, do)
+	}
 }
 
 func Parse(opts *Options) error {
