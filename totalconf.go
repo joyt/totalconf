@@ -19,10 +19,17 @@ type Options struct {
 }
 
 var (
-	flags  = map[string]*flag.FlagSet{}
-	mu     sync.Mutex
-	parsed bool
+	flags        = map[string]*flag.FlagSet{}
+	mu           sync.Mutex
+	parsed       bool
+	onParseFuncs []func()
 )
+
+func OnParsed(do func()) {
+	mu.Lock()
+	defer mu.Unlock()
+	onParseFuncs = append(onParseFuncs, do)
+}
 
 func Parse(opts *Options) error {
 	mu.Lock()
@@ -59,6 +66,9 @@ func Parse(opts *Options) error {
 		}
 	}
 	parsed = true
+	for _, f := range onParseFuncs {
+		go f()
+	}
 	return nil
 }
 
