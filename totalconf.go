@@ -38,6 +38,9 @@ func OnParsed(do func()) {
 func Parse(opts *Options) error {
 	mu.Lock()
 	defer mu.Unlock()
+	if parsed {
+		return nil
+	}
 	var (
 		conf *globalconf.GlobalConf
 		err  error
